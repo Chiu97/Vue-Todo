@@ -8,27 +8,29 @@
     <body>
         <div id="todo-app">
             <div>
-                <input type="button" value="全部标记为已完成" />
-                <input type="text" placeholder="添加todo" v-model="newTodoTitle" @keyup.enter="addTodo" :style="{'border-color':inputBorder}"/>
+                <input type="button" value="全部标记为已完成" @click="markAllAsCompleted"/>
+                <input type="text" placeholder="添加todo" v-model="newTodoTitle" @keyup.enter="addTodo" 
+                :style="{'border-color':inputBorder}" />
                 <span v-if="emptyContent" style="color:red">请输入内容</span>
             </div>
             <ul>
-                <li v-for="todo in todos" :key='todo.id'>
+                <li v-for="todo in filteredTodos" :key='todo.id'>
                     <span  :class="{completed: todo.completed}" @dblclick="modifyTodo(todo)">{{todo.title}}</span>
                     <input type="button" value="标记为未完成" v-if="todo.completed" @click="markAsUncompleted(todo)"/>
                     <input type="button" value="标记为已完成" @click="markAsCompleted(todo)" v-else/>
                     <input type="button" value="删除事项" @click="deleteTodo(todo)"/>
-                    <input type="text" placeholder="编辑 todo..." v-if="editTodo !== null && editTodo.id === todo.id" v-model="todo.title" @keyup.enter="modifyDone(todo)" @keyup.esc="modifyCancel(todo)"/>
+                    <input type="text" placeholder="编辑 todo..." v-if="editTodo !== null && editTodo.id === todo.id" ref="modifyInput"
+                     v-model="todo.title" v-focus="true" @keyup.enter="modifyDone(todo)" @keyup.esc="modifyCancel(todo)"/>
                 </li>
             </ul>
             <div>
-                <span>剩余 3 项未完成 ---</span>
+                <span>剩余 {{uncompletedCount}} 项未完成 ---</span>
                 <span>筛选：
-                    <input type="button" value="全部">
-                    <input type="button" value="进行中">
-                    <input type="button" value="已完成">
-                    <input type="button" value="清除已完成">
-                    <input type="button" value="清除全部">
+                    <input type="button" value="全部" @click="intention='all'" :class="{selected: selectedButton == 'all'}">
+                    <input type="button" value="进行中" @click="intention='ongoing'" :class="{selected: selectedButton == 'ongoing'}">
+                    <input type="button" value="已完成" @click="intention='completed'" :class="{selected: selectedButton == 'completed'}">
+                    <input type="button" value="清除已完成" @click="clearCompleted" :class="{selected: selectedButton == 'clearCompleted'}"> 
+                    <input type="button" value="清除全部" @click="clearAll" :class="{selected: selectedButton == 'clearAll'}"> 
                 </span>
             </div>
         </div>
