@@ -5,3 +5,7 @@
 .selected {
     color: red;
 }
+
+span {
+    cursor: pointer;
+}

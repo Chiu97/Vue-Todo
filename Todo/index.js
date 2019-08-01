@@ -9,6 +9,7 @@ var app = new Vue({
             ],
             newTodoTitle: '',
             emptyContent:false,
+            editTodo: null,
         }
     },
     methods: {
@@ -31,6 +32,19 @@ var app = new Vue({
             const pressButton = confirm("您确定要删除该Todo吗？")
             if(pressButton == true)
                 this.todos.splice(this.todos.indexOf(todo),1)
+        },
+        modifyTodo: function(todo){
+            this.editTodo = {id: todo.id, title: todo.title}
+        },
+        modifyDone: function(todo){
+            if(todo.title === ''){
+                this.deleteTodo(todo)
+            }
+            this.editTodo = null
+        },
+        modifyCancel: function(todo){
+            todo.title = this.editTodo.title
+            this.editTodo = null
         }
     },
     computed: {

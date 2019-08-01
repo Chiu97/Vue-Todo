@@ -14,11 +14,11 @@
             </div>
             <ul>
                 <li v-for="todo in todos" :key='todo.id'>
-                    <span  :class="{completed: todo.completed}">{{todo.title}}</span>
+                    <span  :class="{completed: todo.completed}" @dblclick="modifyTodo(todo)">{{todo.title}}</span>
                     <input type="button" value="标记为未完成" v-if="todo.completed" @click="markAsUncompleted(todo)"/>
                     <input type="button" value="标记为已完成" @click="markAsCompleted(todo)" v-else/>
                     <input type="button" value="删除事项" @click="deleteTodo(todo)"/>
-                    <input type="text" placeholder="编辑 todo..." />
+                    <input type="text" placeholder="编辑 todo..." v-if="editTodo !== null && editTodo.id === todo.id" v-model="todo.title" @keyup.enter="modifyDone(todo)" @keyup.esc="modifyCancel(todo)"/>
                 </li>
             </ul>
             <div>
